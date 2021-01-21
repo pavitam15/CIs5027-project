@@ -1,16 +1,16 @@
 public class TempController {
 
-    private int temperature;
+    private float temperature;
 
-    public TempController(int temperature) {
+    public TempController(float temperature) {
         this.temperature = temperature;
     }
 
-    public int getTemperature() {
+    public float getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(int temperature) {
+    public void setTemperature(float temperature) {
         this.temperature = temperature;
     }
 

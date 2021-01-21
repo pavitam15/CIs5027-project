@@ -28,7 +28,7 @@ public class CsvReaderTemp implements IReader {
                 }
 
                 String[] data = line.split(splitBy);
-                this.sensorlist.add(new TempController(Integer.parseInt(data[0])));
+                this.sensorlist.add(new TempController(Float.parseFloat(data[0])));
                 row_count++;
             }
         }

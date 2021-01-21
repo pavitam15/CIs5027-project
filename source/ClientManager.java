@@ -82,7 +82,14 @@ public class ClientManager extends Thread {
 		if (this.clientSocket == null || this.out == null)
 			throw new SocketException("socket does not exist");
 		
-		this.out.writeObject(msg);
+		//this.out.writeObject(msg);
+
+		CsvReaderTemp csvreadtemp = new CsvReaderTemp("sensor_data.csv");
+		try {
+			csvreadtemp.read();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -120,7 +127,7 @@ public class ClientManager extends Thread {
 	public void run() {
 		
 		// The message from the client
-		String msg = "";
+		String msg = "temp";
 		try {
 			while (!this.stopConnection) {
 				// This block waits until it reads a message from the client

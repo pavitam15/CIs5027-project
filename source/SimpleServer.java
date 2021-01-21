@@ -95,17 +95,15 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 		
         this.receivedMessage = formattedMessage;
         this.changed = true;
-
-        //trial
                
         //this.serverui.getReceiverPanel().updateReceiveWindow(formattedMessage);
 
         if(msg == "temp"){
-        	tempproj = true;
+        	this.tempproj = true;
 		}
 
 		if(msg == "light"){
-			lightproj = true;
+			this.lightproj = true;
 		}
         
         //prepare a response for the client. 
@@ -117,10 +115,10 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 	/**
 	 * Handles displaying of messages received from each client. 
 	 * Called from handleMessagesFromClient()
-	 * @param message
+	 * @param
 	 */
-	public void display(String message) {
-		System.out.println(">> " + message);
+	public void display() {
+		System.out.println("display:");
 	}
 	
 	
@@ -144,10 +142,11 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 	 * @param client	Client to be sent
 	 */
 	public synchronized void sendMessageToClient(String msg, ClientManager client) {
+		CsvReaderTemp csvreadtemp = new CsvReaderTemp("sensor_data.csv");
 		try {
-			client.sendMessageToClient(msg);
+			csvreadtemp.read();
 		} catch (IOException e) {
-			System.err.println("[server: ] Server-to-client message sending failed...");
+			e.printStackTrace();
 		}
 	}
 	
@@ -210,7 +209,7 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 			while (true) {
 				message = fromConsole.readLine();
 
-				//sendMessageToClient("trial");
+				sendMessageToClient(message);
 
 				if(message.equals("STOP"))
 					break;
@@ -244,8 +243,8 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 			this.stopServer = true;
 			fromConsole.close();
 			//close();
-		} catch (Exception ex) {
-			System.out.println("[client: ] unexpected error while reading from console!");
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 	}

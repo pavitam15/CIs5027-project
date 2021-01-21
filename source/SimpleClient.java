@@ -7,7 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
-
+import java.util.ArrayList;
 
 
 /**
@@ -97,25 +97,25 @@ public class SimpleClient implements Runnable {
 	
 	/**
 	 * Handles sending a message to server. In this case, it is a String. 
-	 * @param msg
 	 * @throws IOException
 	 */
-	public void sendMessageToServer(String msg) throws IOException {
+	public void sendMessageToServer(String msgSend) throws IOException {
 		if (this.clientSocket == null || this.output == null)
 			throw new SocketException("socket does not exist");
 
-		//this.output.writeObject("temp");
+		this.output.writeObject("temp");
 
-		this.output.writeObject(msg);
+		//this.output.writeObject(msg);
 	}
 
 	/**
 	 * Handle message from the server. In this case, simply display them. 
-	 * @param msg
+	 * @param
 	 */
 	public void handleMessageFromServer(String msg) {
-		display(msg);
-		
+		CsvReaderTemp csvreadtemp = new CsvReaderTemp("sensor_data.csv");
+		ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
+		sensorlistt.forEach((t) -> System.out.println(t));
 	}
 	
 	/**
@@ -168,7 +168,7 @@ public class SimpleClient implements Runnable {
 			while (true) {
 				//sendMessageToServer("temp");
 				message = fromConsole.readLine();
-				handleUserInput(message);
+				handleUserInput();
 				if(message.equals("STOP"))
 					break;
 			}
@@ -185,14 +185,13 @@ public class SimpleClient implements Runnable {
 
 	/**
 	 * Can perform any pre-processing or checking of the user input before sending it to server. 
-	 * 
-	 * @param userResponse
+	 *
 	 */
-	public void handleUserInput(String userResponse) {
+	public void handleUserInput() {
 
 		if (!this.stopClient) {
 			try {
-				sendMessageToServer(userResponse);
+				sendMessageToServer("temp");
 			} catch (IOException e) {
 				System.err.println("[client: ] error when sending message to server: " + e.toString());
 
