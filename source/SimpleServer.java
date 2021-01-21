@@ -230,7 +230,8 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 					}
 				}
 
-				if(lightproj == true){
+				if(message.equals("light")){
+					this.lightproj = true;
 					try {
 						csvreadlight.read();
 						ArrayList<LightController> sensorlistl = (ArrayList<LightController>) csvreadlight.getData();
