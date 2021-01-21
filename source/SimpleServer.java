@@ -92,6 +92,8 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 		
         this.receivedMessage = formattedMessage;
         this.changed = true;
+
+        //trial
                
         //this.serverui.getReceiverPanel().updateReceiveWindow(formattedMessage);
 
