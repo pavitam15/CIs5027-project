@@ -104,6 +104,8 @@ public class SimpleClient implements Runnable {
 		if (this.clientSocket == null || this.output == null)
 			throw new SocketException("socket does not exist");
 
+		//this.output.writeObject("temp");
+
 		this.output.writeObject(msg);
 	}
 
@@ -161,8 +163,10 @@ public class SimpleClient implements Runnable {
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 			String message = null;
 
+			sendMessageToServer("temp");
+
 			while (true) {
-				sendMessageToServer("temp");
+				//sendMessageToServer("temp");
 				message = fromConsole.readLine();
 				handleUserInput(message);
 				if(message.equals("STOP"))

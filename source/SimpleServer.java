@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Class represents a Server component. 
@@ -211,9 +210,9 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 			while (true) {
 				message = fromConsole.readLine();
 
-				sendMessageToClient("trial");
+				//sendMessageToClient("trial");
 
-				if(message.equals("over"))
+				if(message.equals("STOP"))
 					break;
 
 				if(tempproj == true){

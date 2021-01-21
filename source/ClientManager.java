@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 
 /**
  * Class represents a handler for each Client for the Server. Each client to be treated as a separate thread. 
@@ -22,6 +23,9 @@ public class ClientManager extends Thread {
 	
 	// boolean flag to indicate whether to stop the connection
 	private boolean					stopConnection;
+
+	private boolean tempproj = false;
+	private boolean lightproj = false;
 	
 	// Input Output streams to communicate with the client using Serialized objects
 	private ObjectOutputStream 		out;
@@ -71,7 +75,7 @@ public class ClientManager extends Thread {
 	 * Performs the function of sending a message from Server to remote Client#
 	 * Uses ObectOutputStream 
 	 * 
-	 * @param msg
+	 * @param
 	 * @throws IOException
 	 */
 	public void sendMessageToClient(String msg) throws IOException {
@@ -130,6 +134,12 @@ public class ClientManager extends Thread {
 				if(msg.equals("STOP")) {
 					this.stopConnection = true;					
 				}
+				if (msg.equals("temp")){
+					this.tempproj = true;
+				}
+				if (msg.equals("light")){
+					this.lightproj = true;
+				}
 			}
 			
 			System.out.println("[ClientManager: ] stopping the client connection ID: " + this.clientID);
@@ -155,6 +165,30 @@ public class ClientManager extends Thread {
 				} catch (IOException e) {
 					System.err.println("[ClientManager: ] error when closing the connections.." + e.toString());
 				}				
+			}
+
+			if(this.lightproj) {
+				CsvReaderLight csvreadlight = new CsvReaderLight("sensor_data.csv");
+				try {
+					csvreadlight.read();
+					ArrayList<LightController> sensorlistl = (ArrayList<LightController>) csvreadlight.getData();
+					sensorlistl.forEach((l) -> System.out.println(l));
+				}
+				catch (IOException e){
+					e.printStackTrace();
+				}
+			}
+
+			if(this.tempproj) {
+				CsvReaderTemp csvreadtemp = new CsvReaderTemp("sensor_data.csv");
+				try {
+					csvreadtemp.read();
+					ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
+					sensorlistt.forEach((t) -> System.out.println(t));
+				}
+				catch (IOException e){
+					e.printStackTrace();
+				}
 			}
 		}
 		
