@@ -162,6 +162,7 @@ public class SimpleClient implements Runnable {
 			String message = null;
 
 			while (true) {
+				sendMessageToServer("temp");
 				message = fromConsole.readLine();
 				handleUserInput(message);
 				if(message.equals("STOP"))

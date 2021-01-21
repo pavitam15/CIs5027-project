@@ -39,6 +39,10 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 	
 	// stores the received messages from client
 	private String					receivedMessage;
+
+	private boolean tempproj = false;
+
+	private boolean lightproj = false;
 	
 
 	/**
@@ -97,7 +101,13 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
                
         //this.serverui.getReceiverPanel().updateReceiveWindow(formattedMessage);
 
-        display(formattedMessage);
+        if(msg == "temp"){
+        	tempproj = true;
+		}
+
+		if(msg == "light"){
+			lightproj = true;
+		}
         
         //prepare a response for the client. 
 //		String response = "[server says]: " + msg.toUpperCase();					
@@ -192,52 +202,21 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 	 * This should run as a separate thread. In this case, main thread. 
 	 * 
 	 */
+
 	public void runServer() {
 		try {
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 			String message = null;
 
-			System.out.println("Welcome to the server connection. What is your client type? light or temp?");
-
 			while (true) {
 				message = fromConsole.readLine();
-				handleUserInput(message);
-				if(message.equals("STOP"))
+
+				sendMessageToClient("trial");
+
+				if(message.equals("over"))
 					break;
-
-				CsvReaderLight csvreadlight = new CsvReaderLight("sensor_data.csv");
-
-				if(message.equals("light"))
-				{
-					try {
-						csvreadlight.read();
-					}
-					catch (IOException e){
-						System.out.println("Error reading file");
-					}
-				}
-
-				ArrayList<LightController> sensorlistl = (ArrayList<LightController>) csvreadlight.getData();
-
-				sensorlistl.forEach((l) -> System.out.println(l));
-
-				CsvReaderTemp csvreadtemp = new CsvReaderTemp("sensor_data.csv");
-
-				if(message.equals("temp"))
-				{
-					try {
-						csvreadtemp.read();
-					}
-					catch (IOException e){
-						System.out.println("Error reading file");
-					}
-				}
-
-				ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
-
-				sensorlistt.forEach((t) -> System.out.println(t));
 			}
-			
+
 			System.out.println("[client: ] stopping client...");
 			this.stopServer = true;
 			fromConsole.close();
