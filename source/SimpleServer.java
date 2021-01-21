@@ -215,6 +215,30 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 
 				if(message.equals("over"))
 					break;
+
+				if(tempproj == true){
+					CsvReaderTemp csvreadtemp = new CsvReaderTemp("sensor_data.csv");
+					try {
+						csvreadtemp.read();
+						ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
+						sensorlistt.forEach((t) -> System.out.println(t));
+					}
+					catch (IOException e){
+						e.printStackTrace();
+					}
+				}
+
+				if(lightproj == true){
+					CsvReaderLight csvreadlight = new CsvReaderLight("sensor_data.csv");
+					try {
+						csvreadlight.read();
+						ArrayList<LightController> sensorlistl = (ArrayList<LightController>) csvreadlight.getData();
+						sensorlistl.forEach((l) -> System.out.println(l));
+					}
+					catch (IOException e){
+						e.printStackTrace();
+					}
+				}
 			}
 
 			System.out.println("[client: ] stopping client...");

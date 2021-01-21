@@ -127,9 +127,9 @@ public class ClientManager extends Thread {
 				msg = (String)this.in.readObject();
 				this.server.handleMessagesFromClient(msg, this);
 				
-				if(msg.equals("over")) {
+				if(msg.equals("STOP")) {
 					this.stopConnection = true;					
-				}				
+				}
 			}
 			
 			System.out.println("[ClientManager: ] stopping the client connection ID: " + this.clientID);
