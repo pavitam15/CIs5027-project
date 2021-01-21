@@ -206,6 +206,10 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 			String message = null;
 
+			CsvReaderTemp csvreadtemp = new CsvReaderTemp("sensor_data.csv");
+
+			CsvReaderLight csvreadlight = new CsvReaderLight("sensor_data.csv");
+
 			while (true) {
 				message = fromConsole.readLine();
 
@@ -214,8 +218,8 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 				if(message.equals("STOP"))
 					break;
 
-				if(tempproj == true){
-					CsvReaderTemp csvreadtemp = new CsvReaderTemp("sensor_data.csv");
+				if(message.equals("temp")){
+					this.tempproj = true;
 					try {
 						csvreadtemp.read();
 						ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
@@ -227,7 +231,6 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 				}
 
 				if(lightproj == true){
-					CsvReaderLight csvreadlight = new CsvReaderLight("sensor_data.csv");
 					try {
 						csvreadlight.read();
 						ArrayList<LightController> sensorlistl = (ArrayList<LightController>) csvreadlight.getData();

@@ -28,7 +28,7 @@ public class CsvReaderLight implements IReader {
                 }
 
                 String[] data = line.split(splitBy);
-                this.sensorlist.add(new LightController(Integer.parseInt(data[0])));
+                this.sensorlist.add(new LightController(Integer.parseInt(data[7])));
                 row_count++;
             }
         }
