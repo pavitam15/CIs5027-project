@@ -168,7 +168,7 @@ public class SimpleClient implements Runnable {
 			while (true) {
 				//sendMessageToServer("temp");
 				message = fromConsole.readLine();
-				handleUserInput();
+				handleUserInput(message);
 				if(message.equals("STOP"))
 					break;
 			}
@@ -186,12 +186,13 @@ public class SimpleClient implements Runnable {
 	/**
 	 * Can perform any pre-processing or checking of the user input before sending it to server. 
 	 *
+	 * @param
 	 */
-	public void handleUserInput() {
+	public void handleUserInput(String userResponse) {
 
 		if (!this.stopClient) {
 			try {
-				sendMessageToServer("temp");
+				sendMessageToServer(userResponse);
 			} catch (IOException e) {
 				System.err.println("[client: ] error when sending message to server: " + e.toString());
 

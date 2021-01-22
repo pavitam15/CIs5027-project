@@ -212,21 +212,24 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 
 			while (true) {
 				message = fromConsole.readLine();
+				handleUserInput(message);
 
-				sendMessageToClient(message);
+				//sendMessageToClient(message);
 
 				if(message.equals("STOP"))
 					break;
 
 				if(message.equals("temp")){
 					this.tempproj = true;
-					try {
-						csvreadtemp.read();
-						ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
-						sensorlistt.forEach((t) -> System.out.println(t));
-					}
-					catch (IOException e){
-						e.printStackTrace();
+					while(true){
+						try {
+							csvreadtemp.read();
+							ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
+							sensorlistt.forEach((t) -> System.out.println(t));
+						}
+						catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 
