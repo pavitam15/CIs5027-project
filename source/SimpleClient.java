@@ -99,13 +99,13 @@ public class SimpleClient implements Runnable {
 	 * Handles sending a message to server. In this case, it is a String. 
 	 * @throws IOException
 	 */
-	public void sendMessageToServer(String msgSend) throws IOException {
+	public void sendMessageToServer(String msg) throws IOException {
 		if (this.clientSocket == null || this.output == null)
 			throw new SocketException("socket does not exist");
 
-		this.output.writeObject("temp");
+		//this.output.writeObject("temp");
 
-		//this.output.writeObject(msg);
+		this.output.writeObject(msg);
 	}
 
 	/**
@@ -225,7 +225,7 @@ public class SimpleClient implements Runnable {
 				// msg by implementing the following method
 				handleMessageFromServer(msg);
 			}
-			
+
 			System.out.println("[client: ] client stopped..");
 		} catch (Exception exception) {
 			if (!this.stopClient) {
@@ -238,7 +238,7 @@ public class SimpleClient implements Runnable {
 		} finally {
 			clientReader = null;
 		}
-		
+
 		System.out.println("[client: ] exiting thread...");
 	}
 

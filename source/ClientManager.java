@@ -85,14 +85,7 @@ public class ClientManager extends Thread {
 		if (this.clientSocket == null || this.out == null)
 			throw new SocketException("socket does not exist");
 		
-		//this.out.writeObject(msg);
-
-		CsvReaderTemp csvreadtemp = new CsvReaderTemp("sensor_data.csv");
-		try {
-			csvreadtemp.read();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.out.writeObject(msg);
 	}
 	
 	/**
@@ -149,9 +142,10 @@ public class ClientManager extends Thread {
 				if(msg.equals("STOP")) {
 					this.stopConnection = true;					
 				}
+
 				if(msg.equals("temp")){
 					this.tempproj = true;
-					while(true){
+					while (true){
 						try {
 							csvreadtemp.read();
 							ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
@@ -168,33 +162,31 @@ public class ClientManager extends Thread {
 
 				if(msg.equals("light")){
 					this.lightproj = true;
-					while (true){
-						try {
-							csvreadlight.read();
-							ArrayList<LightController> sensorlistl = (ArrayList<LightController>) csvreadlight.getData();
-							for(LightController l : sensorlistl){
-								System.out.println(l);
-								Thread.sleep(1000);
-							}
+					try {
+						csvreadlight.read();
+						ArrayList<LightController> sensorlistl = (ArrayList<LightController>) csvreadlight.getData();
+						for(LightController l : sensorlistl){
+							System.out.println(l);
+							Thread.sleep(1000);
 						}
-						catch (IOException | InterruptedException e){
-							e.printStackTrace();
-						}
+					}
+					catch (IOException | InterruptedException e){
+						e.printStackTrace();
 					}
 				}
 			}
-			
+
 			System.out.println("[ClientManager: ] stopping the client connection ID: " + this.clientID);
 		} catch (Exception e) {
 			System.err.println("[ClientManager: ] error when reading message from client.." + e.toString());
 			/**
-			 * If there is an error, while the connection is not stopped, close all. 
+			 * If there is an error, while the connection is not stopped, close all.
 			 */
 			if (!this.stopConnection) {
 				try {
 					closeAll();
-				} 
-				catch (Exception ex) 
+				}
+				catch (Exception ex)
 				{
 					System.err.println("[ClientManager: ] error when closing the connections.." + ex.toString());
 				}
@@ -206,7 +198,7 @@ public class ClientManager extends Thread {
 					closeAll();
 				} catch (IOException e) {
 					System.err.println("[ClientManager: ] error when closing the connections.." + e.toString());
-				}				
+				}
 			}
 		}
 		
