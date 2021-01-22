@@ -95,6 +95,8 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 		
         this.receivedMessage = formattedMessage;
         this.changed = true;
+
+		display(formattedMessage);
                
         //this.serverui.getReceiverPanel().updateReceiveWindow(formattedMessage);
 
@@ -117,8 +119,8 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 	 * Called from handleMessagesFromClient()
 	 * @param
 	 */
-	public void display() {
-		System.out.println("display:");
+	public void display(String message) {
+		System.out.println(">> " + message);
 	}
 	
 	
@@ -142,11 +144,10 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 	 * @param client	Client to be sent
 	 */
 	public synchronized void sendMessageToClient(String msg, ClientManager client) {
-		CsvReaderTemp csvreadtemp = new CsvReaderTemp("sensor_data.csv");
 		try {
-			csvreadtemp.read();
+			client.sendMessageToClient(msg);
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("[server: ] Server-to-client message sending failed...");
 		}
 	}
 	
@@ -206,52 +207,19 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 			String message = null;
 
-			CsvReaderTemp csvreadtemp = new CsvReaderTemp("sensor_data.csv");
-
-			CsvReaderLight csvreadlight = new CsvReaderLight("sensor_data.csv");
-
 			while (true) {
 				message = fromConsole.readLine();
 				handleUserInput(message);
-
-				//sendMessageToClient(message);
-
 				if(message.equals("STOP"))
 					break;
-
-				if(message.equals("temp")){
-					this.tempproj = true;
-					while(true){
-						try {
-							csvreadtemp.read();
-							ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
-							sensorlistt.forEach((t) -> System.out.println(t));
-						}
-						catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-
-				if(message.equals("light")){
-					this.lightproj = true;
-					try {
-						csvreadlight.read();
-						ArrayList<LightController> sensorlistl = (ArrayList<LightController>) csvreadlight.getData();
-						sensorlistl.forEach((l) -> System.out.println(l));
-					}
-					catch (IOException e){
-						e.printStackTrace();
-					}
-				}
 			}
 
 			System.out.println("[client: ] stopping client...");
 			this.stopServer = true;
 			fromConsole.close();
 			//close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception ex) {
+			System.out.println("[client: ] unexpected error while reading from console!");
 		}
 
 	}

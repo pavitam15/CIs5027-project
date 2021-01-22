@@ -54,6 +54,9 @@ public class ClientManager extends Thread {
 		
 		System.out.println("[ClientManager: ] new client request received, port " 
 				+ socket.getPort());
+
+		System.out.println("What is your client type? light or temp?");
+
 		try {
 			this.out = new ObjectOutputStream(this.clientSocket.getOutputStream());
 			this.in = new ObjectInputStream(this.clientSocket.getInputStream());			
@@ -127,8 +130,13 @@ public class ClientManager extends Thread {
 	public void run() {
 		
 		// The message from the client
-		String msg = "temp";
+		String msg = "";
 		try {
+
+			CsvReaderTemp csvreadtemp = new CsvReaderTemp("sensor_data.csv");
+
+			CsvReaderLight csvreadlight = new CsvReaderLight("sensor_data.csv");
+
 			while (!this.stopConnection) {
 				// This block waits until it reads a message from the client
 				// and then sends it for handling by the server,
@@ -141,11 +149,38 @@ public class ClientManager extends Thread {
 				if(msg.equals("STOP")) {
 					this.stopConnection = true;					
 				}
-				if (msg.equals("temp")){
+				if(msg.equals("temp")){
 					this.tempproj = true;
+					while(true){
+						try {
+							csvreadtemp.read();
+							ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
+							for(TempController t : sensorlistt){
+								System.out.println(t);
+								Thread.sleep(1000);
+							}
+						}
+						catch (IOException | InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
 				}
-				if (msg.equals("light")){
+
+				if(msg.equals("light")){
 					this.lightproj = true;
+					while (true){
+						try {
+							csvreadlight.read();
+							ArrayList<LightController> sensorlistl = (ArrayList<LightController>) csvreadlight.getData();
+							for(LightController l : sensorlistl){
+								System.out.println(l);
+								Thread.sleep(1000);
+							}
+						}
+						catch (IOException | InterruptedException e){
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 			
@@ -172,30 +207,6 @@ public class ClientManager extends Thread {
 				} catch (IOException e) {
 					System.err.println("[ClientManager: ] error when closing the connections.." + e.toString());
 				}				
-			}
-
-			if(this.lightproj) {
-				CsvReaderLight csvreadlight = new CsvReaderLight("sensor_data.csv");
-				try {
-					csvreadlight.read();
-					ArrayList<LightController> sensorlistl = (ArrayList<LightController>) csvreadlight.getData();
-					sensorlistl.forEach((l) -> System.out.println(l));
-				}
-				catch (IOException e){
-					e.printStackTrace();
-				}
-			}
-
-			if(this.tempproj) {
-				CsvReaderTemp csvreadtemp = new CsvReaderTemp("sensor_data.csv");
-				try {
-					csvreadtemp.read();
-					ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
-					sensorlistt.forEach((t) -> System.out.println(t));
-				}
-				catch (IOException e){
-					e.printStackTrace();
-				}
 			}
 		}
 		

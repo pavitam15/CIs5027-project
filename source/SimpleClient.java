@@ -113,9 +113,7 @@ public class SimpleClient implements Runnable {
 	 * @param
 	 */
 	public void handleMessageFromServer(String msg) {
-		CsvReaderTemp csvreadtemp = new CsvReaderTemp("sensor_data.csv");
-		ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
-		sensorlistt.forEach((t) -> System.out.println(t));
+		display(msg);
 	}
 	
 	/**
@@ -163,10 +161,9 @@ public class SimpleClient implements Runnable {
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 			String message = null;
 
-			sendMessageToServer("temp");
+			//sendMessageToServer("temp");
 
 			while (true) {
-				//sendMessageToServer("temp");
 				message = fromConsole.readLine();
 				handleUserInput(message);
 				if(message.equals("STOP"))
