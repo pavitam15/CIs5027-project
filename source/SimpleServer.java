@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
 /**
  * Class represents a Server component. 
@@ -38,10 +37,6 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 	
 	// stores the received messages from client
 	private String					receivedMessage;
-
-	private boolean tempproj = false;
-
-	private boolean lightproj = false;
 	
 
 	/**
@@ -99,14 +94,6 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 		display(formattedMessage);
                
         //this.serverui.getReceiverPanel().updateReceiveWindow(formattedMessage);
-
-        if(msg == "temp"){
-        	this.tempproj = true;
-		}
-
-		if(msg == "light"){
-			this.lightproj = true;
-		}
         
         //prepare a response for the client. 
 //		String response = "[server says]: " + msg.toUpperCase();					

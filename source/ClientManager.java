@@ -33,9 +33,7 @@ public class ClientManager extends Thread {
 	
 	// store an incrementing ID for the client. 
 	private int 					clientID;
-	
 
-	
 	/**
 	 * Constructor to be called, when handling multiple clients. Requires a ThreadGroup instance from the Server
 	 * 
@@ -121,10 +119,19 @@ public class ClientManager extends Thread {
 	 */
 	@Override
 	public void run() {
-		
+
 		// The message from the client
 		String msg = "";
+
 		try {
+
+			/*if(msg.equals("temp")){
+				this.tempproj = true;
+			}
+
+			if(msg.equals("light")){
+				this.lightproj = true;
+			}*/
 
 			CsvReaderTemp csvreadtemp = new CsvReaderTemp("sensor_data.csv");
 
@@ -144,7 +151,7 @@ public class ClientManager extends Thread {
 				}
 
 				if(msg.equals("temp")){
-					this.tempproj = true;
+					//this.tempproj = true;
 					while (true){
 						try {
 							csvreadtemp.read();
@@ -161,7 +168,7 @@ public class ClientManager extends Thread {
 				}
 
 				if(msg.equals("light")){
-					this.lightproj = true;
+					//this.lightproj = true;
 					try {
 						csvreadlight.read();
 						ArrayList<LightController> sensorlistl = (ArrayList<LightController>) csvreadlight.getData();
