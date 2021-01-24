@@ -32,7 +32,6 @@ public class BrightPanel extends JPanel {
         this.bulb_instance = bulbInstance;
     }
 
-
     public String getBulbBrightValue() {
         return txt_bright_value.getText();
     }

@@ -167,6 +167,9 @@ public class ClientManager extends Thread {
 							if(t.getTemperature() < 22){
 								//slow down fan
 							}
+							if(msg.equals("STOP")) {
+								break; //break works but only with t.blah not msg.equals
+							}
 						}
 					}
 					catch (IOException | InterruptedException e) {
