@@ -1,5 +1,8 @@
 
 
+import components.Fan;
+import components.SpeedPanel;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -152,18 +155,22 @@ public class ClientManager extends Thread {
 
 				if(msg.equals("temp")){
 					//this.tempproj = true;
-					while (true){
-						try {
-							csvreadtemp.read();
-							ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
-							for(TempController t : sensorlistt){
-								System.out.println(t);
-								Thread.sleep(1000);
+					try {
+						csvreadtemp.read();
+						ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
+						for(TempController t : sensorlistt){
+							System.out.println(t);
+							Thread.sleep(1000);
+							if(t.getTemperature() > 25){
+								//speed up fan
+							}
+							if(t.getTemperature() < 22){
+								//slow down fan
 							}
 						}
-						catch (IOException | InterruptedException e) {
-							e.printStackTrace();
-						}
+					}
+					catch (IOException | InterruptedException e) {
+						e.printStackTrace();
 					}
 				}
 

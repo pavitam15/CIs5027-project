@@ -1,3 +1,6 @@
+import apps.BulbApp;
+import apps.FanApp;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,6 +20,9 @@ public class CsvReaderLight implements IReader {
     @Override
     public void read() throws IOException {
         String line = "";
+
+        BulbApp bulb = new BulbApp();
+        bulb.setVisible(true);
 
         try(BufferedReader br = new BufferedReader(new FileReader(this.filename))) {
             int row_count = 0;

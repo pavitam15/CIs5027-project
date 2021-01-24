@@ -1,3 +1,5 @@
+import apps.FanApp;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,6 +22,9 @@ public class CsvReaderTemp implements IReader {
 
         try(BufferedReader br = new BufferedReader(new FileReader(this.filename))) {
             int row_count = 0;
+
+            FanApp fan = new FanApp();
+            fan.setVisible(true);
 
             while ((line = br.readLine()) != null) {
                 if(row_count == 0) {

@@ -1,3 +1,4 @@
+
 public class TempController {
 
     private float temperature;
@@ -7,6 +8,7 @@ public class TempController {
     }
 
     public float getTemperature() {
+
         return temperature;
     }
 
