@@ -158,12 +158,13 @@ public class ClientManager extends Thread {
 								//slow down fan
 							}
 							if(msg.equals("STOP")) {
-								break; //break works but only with t.blah not msg.equals so can't break when csv is running
+								break; //break works but only with t.something not msg.equals so can't break when csv is running
 							}
 						}
 					}
 					catch (IOException | InterruptedException e) {
-						System.err.println("Error: Unable to retrieve temperature values");
+						e.printStackTrace();
+						//System.err.println("Error: Unable to retrieve temperature values");
 					}
 				}
 
@@ -177,10 +178,14 @@ public class ClientManager extends Thread {
 						for(LightController l : sensorlistl){
 							System.out.println(l);
 							Thread.sleep(1000);
+							if(msg.equals("STOP")) {
+								break; //break works but only with t.something not msg.equals so can't break when csv is running
+							}
 						}
 					}
 					catch (IOException | InterruptedException e){
-						System.err.println("Error: Unable to retrieve light level values");
+						e.printStackTrace();
+						//System.err.println("Error: Unable to retrieve light level values");
 					}
 				}
 				else{

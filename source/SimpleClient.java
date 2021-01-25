@@ -240,14 +240,13 @@ public class SimpleClient implements Runnable {
 	public static void main(String[] args) {
 		
 		// hardcoded server IP and port number. 
-		//String ip = "127.0.0.1";
-		//int port = 7777;
+		String ip = "127.0.0.1";
+		int port = 7777;
 		
-		String ip = args[0];
-		int port = Integer.parseInt(args[1]);
-		//String path = args[2];
+		// String ip = args[0];
+		// int port = Integer.parseInt(args[1]);
 
-		//CsvReaderLight csvreaderlight = new CsvReaderLight(path);
+		// String path = args[2];
 
 		SimpleClient chatclient = null;
 		
