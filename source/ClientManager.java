@@ -145,26 +145,27 @@ public class ClientManager extends Thread {
 				 with an n second delay between each row and the fan app is opened
 				 */
 				if(msg.equals("temp")){
-					try {
-						csvreadtemp.read();
-						ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
-						for(TempController t : sensorlistt){
-							System.out.println(t);
-							Thread.sleep(1000);
-							if(t.getTemperature() > 25){
-								//speed up fan
-							}
-							if(t.getTemperature() < 22){
-								//slow down fan
-							}
-							if(msg.equals("STOP")) {
-								break; //break works but only with t.something not msg.equals so can't break when csv is running
+					while(true){
+						try {
+							csvreadtemp.read();
+							ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
+							for(TempController t : sensorlistt){
+								System.out.println(t);
+								Thread.sleep(500);
+								if(t.getTemperature() > 25){
+									//speed up fan
+								}
+								if(t.getTemperature() < 22){
+									//slow down fan
+								}
+								if(msg.equals("STOP")) {
+									break; //break works but only with t.something not msg.equals so can't break when csv is running
+								}
 							}
 						}
-					}
-					catch (IOException | InterruptedException e) {
-						e.printStackTrace();
-						//System.err.println("Error: Unable to retrieve temperature values");
+						catch (IOException | InterruptedException e) {
+							System.err.println("Error: Unable to retrieve temperature values");
+						}
 					}
 				}
 
@@ -172,20 +173,21 @@ public class ClientManager extends Thread {
 				 with an n second delay between each row and the bulb app is opened
 				 */
 				if(msg.equals("light")){
-					try {
-						csvreadlight.read();
-						ArrayList<LightController> sensorlistl = (ArrayList<LightController>) csvreadlight.getData();
-						for(LightController l : sensorlistl){
-							System.out.println(l);
-							Thread.sleep(1000);
-							if(msg.equals("STOP")) {
-								break; //break works but only with t.something not msg.equals so can't break when csv is running
+					while (true){
+						try {
+							csvreadlight.read();
+							ArrayList<LightController> sensorlistl = (ArrayList<LightController>) csvreadlight.getData();
+							for(LightController l : sensorlistl){
+								System.out.println(l);
+								Thread.sleep(500);
+								if(msg.equals("STOP")) {
+									break; //break works but only with t.something not msg.equals so can't break when csv is running
+								}
 							}
 						}
-					}
-					catch (IOException | InterruptedException e){
-						e.printStackTrace();
-						//System.err.println("Error: Unable to retrieve light level values");
+						catch (IOException | InterruptedException e){
+							System.err.println("Error: Unable to retrieve light level values");
+						}
 					}
 				}
 				else{
