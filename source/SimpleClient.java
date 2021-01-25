@@ -1,5 +1,3 @@
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,27 +5,23 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
 
 
 /**
  * Represents a client. 
- * Allows user inputs through keyboard and pass them to the server. 
- * Receives responses from the user. 
- * 
- * @author thanuja
- * @version 20.11.2019
+ * Allows user inputs through keyboard and pass them to the server.
+ * @author pavmohammed
  */
 public class SimpleClient implements Runnable {
 
 	// reference variable for client socket
 	private Socket 					clientSocket;
 
-	// reference variable to store object IO streams, should be used when working with serialized objects.
+	// reference variable to store object IO streams, when working with serialized objects.
 	private ObjectOutputStream 		output;
 	private ObjectInputStream 		input;
 
-	// boolean variable to store stopclient flag.
+	// boolean variable to store stopClient flag.
 	private boolean 				stopClient;
 
 	// reference variable for Thread
@@ -57,11 +51,11 @@ public class SimpleClient implements Runnable {
 	 * @param port
 	 * @throws IOException
 	 */
-	public void init(String host, int port) throws IOException {
+	/*public void init(String host, int port) throws IOException {
 		this.host = host;
 		this.port = port;
 		openConnection();
-	}
+	}*/
 	
 	/**
 	 * opens a connection to the server
@@ -71,7 +65,7 @@ public class SimpleClient implements Runnable {
 	 */
 	public void openConnection() throws IOException {
 
-		// Create the sockets and the data streams
+		// Create the sockets and the object IO streams
 		try {
 
 			this.clientSocket = new Socket(this.host, this.port);
@@ -102,8 +96,6 @@ public class SimpleClient implements Runnable {
 	public void sendMessageToServer(String msg) throws IOException {
 		if (this.clientSocket == null || this.output == null)
 			throw new SocketException("socket does not exist");
-
-		//this.output.writeObject("temp");
 
 		this.output.writeObject(msg);
 	}
@@ -161,8 +153,6 @@ public class SimpleClient implements Runnable {
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 			String message = null;
 
-			//sendMessageToServer("temp");
-
 			while (true) {
 				message = fromConsole.readLine();
 				handleUserInput(message);
@@ -216,13 +206,14 @@ public class SimpleClient implements Runnable {
 
 		try {
 			while (!this.stopClient) {
-				// Get data from Server and send it to the handler
-				// The thread waits indefinitely at the following
-				// statement until something is received from the server
+				/* Get data from Server and send it to the handler
+				The thread waits indefinitely at the following
+				statement until something is received from the server */
 				msg = (String) input.readObject();
 
-				// Concrete subclasses do what they want with the
-				// msg by implementing the following method
+				/* Concrete subclasses do what they want with the
+				msg by implementing the following method
+				 */
 				handleMessageFromServer(msg);
 			}
 
@@ -238,7 +229,7 @@ public class SimpleClient implements Runnable {
 		} finally {
 			clientReader = null;
 		}
-
+		// Properly closes the client connection
 		System.out.println("[client: ] exiting thread...");
 	}
 
@@ -249,12 +240,14 @@ public class SimpleClient implements Runnable {
 	public static void main(String[] args) {
 		
 		// hardcoded server IP and port number. 
-		String ip = "127.0.0.1";
-		int port = 7777;
+		//String ip = "127.0.0.1";
+		//int port = 7777;
 		
-		//ip = args[0];
-		//port = Integer.parseInt(args[1]);
-		
+		String ip = args[0];
+		int port = Integer.parseInt(args[1]);
+		//String path = args[2];
+
+		//CsvReaderLight csvreaderlight = new CsvReaderLight(path);
 
 		SimpleClient chatclient = null;
 		
@@ -262,7 +255,7 @@ public class SimpleClient implements Runnable {
 		try {
 			chatclient = new SimpleClient(ip, port);
 		} catch (IOException e) {
-			System.err.println("[client: ] error in openning the client connection to " + ip + " on port: " + port);
+			System.err.println("[client: ] error in opening the client connection to " + ip + " on port: " + port);
 		}
 
 		// Main thread continues and in this case used to handle user inputs from the terminal.

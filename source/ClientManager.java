@@ -1,8 +1,4 @@
 
-
-import components.Fan;
-import components.SpeedPanel;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,23 +8,18 @@ import java.util.ArrayList;
 
 /**
  * Class represents a handler for each Client for the Server. Each client to be treated as a separate thread. 
- * 
- * @author thanuja
- * @version 20.11.2019
+ * @author pavmohammed
  */
 public class ClientManager extends Thread {
 
 	// reference variable to store client socket
 	private Socket 					clientSocket;
 	
-	// reference for the Sever
+	// reference for the Server
 	private AbstractServerComponent	server;
 	
 	// boolean flag to indicate whether to stop the connection
 	private boolean					stopConnection;
-
-	private boolean tempproj = false;
-	private boolean lightproj = false;
 	
 	// Input Output streams to communicate with the client using Serialized objects
 	private ObjectOutputStream 		out;
@@ -47,17 +38,20 @@ public class ClientManager extends Thread {
 	 */
 	public ClientManager(ThreadGroup threadgroup, Socket socket, int clientID, AbstractServerComponent server) {
 		super(threadgroup, (Runnable) null);
-		
+
+		// Set stopConnection to false until indicated by the client or an error occurs
 		this.clientSocket = socket;
 		this.server = server;
 		this.stopConnection = false;
 		this.clientID = clientID;
-		
+
+		// Printed to the server when a client successfully connects
 		System.out.println("[ClientManager: ] new client request received, port " 
 				+ socket.getPort());
 
 		System.out.println("What is your client type? light or temp?");
 
+		//Initialise IO Streams
 		try {
 			this.out = new ObjectOutputStream(this.clientSocket.getOutputStream());
 			this.in = new ObjectInputStream(this.clientSocket.getInputStream());			
@@ -72,12 +66,12 @@ public class ClientManager extends Thread {
 			}
 		}
 		
-		start();	
+		start();	// Start thread
 	}
 	
 	/**
 	 * Performs the function of sending a message from Server to remote Client#
-	 * Uses ObectOutputStream 
+	 * Uses ObjectOutputStream
 	 * 
 	 * @param
 	 * @throws IOException
@@ -117,7 +111,7 @@ public class ClientManager extends Thread {
 	}
 
 	/**
-	 * Receive messages (String) from the client, passes the message to Sever's handleMessagesFromClient() method.
+	 * Receive messages (String) from the client, passes the message to Server's handleMessagesFromClient() method.
 	 * Works in a loop until the boolean flag to stop connection is set to true. 
 	 */
 	@Override
@@ -127,34 +121,30 @@ public class ClientManager extends Thread {
 		String msg = "";
 
 		try {
-
-			/*if(msg.equals("temp")){
-				this.tempproj = true;
-			}
-
-			if(msg.equals("light")){
-				this.lightproj = true;
-			}*/
-
+			//Create new instances of CSVReaders
 			CsvReaderTemp csvreadtemp = new CsvReaderTemp("sensor_data.csv");
 
 			CsvReaderLight csvreadlight = new CsvReaderLight("sensor_data.csv");
 
 			while (!this.stopConnection) {
-				// This block waits until it reads a message from the client
-				// and then sends it for handling by the server,
-				// thread indefinitely waits at the following
-				// statement until something is received from the server
+				/* This block waits until it reads a message from the client
+				and then sends it for handling by the server,
+				thread indefinitely waits at the following
+				statement until something is received from the server
+				 */
 				
 				msg = (String)this.in.readObject();
 				this.server.handleMessagesFromClient(msg, this);
-				
+
+				//Stop the connection when the user types STOP
 				if(msg.equals("STOP")) {
 					this.stopConnection = true;					
 				}
 
+				/* if the user types "temp", the temperature values are displayed
+				 with an n second delay between each row and the fan app is opened
+				 */
 				if(msg.equals("temp")){
-					//this.tempproj = true;
 					try {
 						csvreadtemp.read();
 						ArrayList<TempController> sensorlistt = (ArrayList<TempController>) csvreadtemp.getData();
@@ -168,17 +158,19 @@ public class ClientManager extends Thread {
 								//slow down fan
 							}
 							if(msg.equals("STOP")) {
-								break; //break works but only with t.blah not msg.equals
+								break; //break works but only with t.blah not msg.equals so can't break when csv is running
 							}
 						}
 					}
 					catch (IOException | InterruptedException e) {
-						e.printStackTrace();
+						System.err.println("Error: Unable to retrieve temperature values");
 					}
 				}
 
+				/* if the user types "light", the light level values are displayed
+				 with an n second delay between each row and the bulb app is opened
+				 */
 				if(msg.equals("light")){
-					//this.lightproj = true;
 					try {
 						csvreadlight.read();
 						ArrayList<LightController> sensorlistl = (ArrayList<LightController>) csvreadlight.getData();
@@ -188,8 +180,11 @@ public class ClientManager extends Thread {
 						}
 					}
 					catch (IOException | InterruptedException e){
-						e.printStackTrace();
+						System.err.println("Error: Unable to retrieve light level values");
 					}
+				}
+				else{
+					System.out.println("Error: Please enter either 'light' or 'temp'");
 				}
 			}
 

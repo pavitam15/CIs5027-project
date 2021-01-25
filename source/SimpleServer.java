@@ -1,5 +1,3 @@
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,10 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * Class represents a Server component. 
- * 
- * @author thanuja
- * @version 20.11.2019
+ * Class represents a Server component.
+ * @author pavmohammed
  */
 public class SimpleServer extends AbstractServerComponent implements Runnable {
 
@@ -23,7 +19,7 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 	// boolean flag to indicate the server stop. 
 	private boolean 				stopServer;
 
-	// reference variabale for the Thread
+	// reference variable for the Thread
 	private Thread 					serverListenerThread;
 
 	// reference variable for ThreadGroup when handling multiple clients
@@ -32,7 +28,7 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 	// variable to store server's port number
 	int port;
 	
-	// will be set to true when a new message is received.
+	//will be set to true when a new message is received.
 	private boolean					changed;
 	
 	// stores the received messages from client
@@ -41,7 +37,6 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 
 	/**
 	 * Constructor.
-	 * 
 	 */
 	public SimpleServer() {
 		
@@ -75,11 +70,8 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 	}
 	
 	/**
-	 * handles messages from each client. In this case messages are simply displayed. 
-	 * Modified to prepare a response and send back to the same client. Simply changes the input text to upper case. 
+	 * handles messages from each client. In this case messages are simply displayed.
 	 * This is a shared resource among all client threads, so it has to be synchronized.
-	 * 
-	 * 
 	 * @param msg
 	 * @param client
 	 */
@@ -92,13 +84,6 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
         this.changed = true;
 
 		display(formattedMessage);
-               
-        //this.serverui.getReceiverPanel().updateReceiveWindow(formattedMessage);
-        
-        //prepare a response for the client. 
-//		String response = "[server says]: " + msg.toUpperCase();					
-//		sendMessageToClient(response, client);
-		
 	}
 	
 	/**
@@ -212,8 +197,7 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 	}
 
 	/**
-	 * Can perform any pre-processing or checking of the user input before sending it to server. 
-	 * 
+	 * Can perform any pre-processing or checking of the user input before sending it to server.
 	 * @param userResponse
 	 */
 	public void handleUserInput(String userResponse) {
@@ -230,8 +214,7 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 	
 	/**
 	 * Represents the thread that listens to the port, and creates client connections. 
-	 * Here, each connection is treated as a separate thread, and each client is associated with the ThreadGroup. 
-	 * 
+	 * Here, each connection is treated as a separate thread, and each client is associated with the ThreadGroup.
 	 */
 	@Override
 	public void run() {
@@ -266,8 +249,7 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 	}
 
 	/**
-	 * Main() to start the SimpleServer. 
-	 * 
+	 * Main() to start the SimpleServer.
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -286,10 +268,4 @@ public class SimpleServer extends AbstractServerComponent implements Runnable {
 		server.runServer();
 
 	}
-
-
-
-
-
-
 }

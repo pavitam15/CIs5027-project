@@ -1,4 +1,4 @@
-import java.io.IOException;
+/* import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainTemp{
@@ -18,4 +18,4 @@ public class MainTemp{
 
         sensorlist.forEach(System.out::println);
     }
-}
+} */

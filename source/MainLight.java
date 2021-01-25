@@ -1,12 +1,12 @@
-import java.io.IOException;
+/* import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainLight {
 
     public static void main(String[] args) {
 
-        String path = args[0];
-        CsvReaderLight csvReaderLight = new CsvReaderLight(path);
+        String filename = args[0];
+        CsvReaderLight csvReaderLight = new CsvReaderLight(filename);
 
         try {
             csvReaderLight.read();
@@ -18,4 +18,4 @@ public class MainLight {
 
         sensorlist.forEach(System.out::println);
     }
-}
+} */
