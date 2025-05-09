@@ -32,3 +32,14 @@ o Once the client receives a temperature value, the program should compare it wi
 - For client 2 (light controller):
 o Once the client receives a light level in lumens, the program should adjust the brightness of the background or change its colour theme. ]
 - Clients can stop communicating with the server when they type in “STOP” command in, or click on a stop button in the User Interface.
+
+To run in IntelliJ:
+NT. The port number and IP address are hardcoded into the program to make sure it can run in the IDE.
+First run the SimpleServer program by right clicking the class and selecting “run”
+Next run the SimpleClient program by right clicking the class and selecting “run”
+The server will prompt the client to enter either “light” or “temp” on the client side
+If you enter something else, an error message will appear
+If you enter “light”, the bulb app will open, and the server will begin to print the light level values with a one second delay between each row
+If you enter “temp”, the fan app will open, and the server will begin to print the temperature values with a one second delay between each row
+If you type “STOP” whilst the csv files are not being printed, the connection will be closed, and the thread exited
+To exit whilst the csv is being printed, you will have to stop the programs through the IDE.
